@@ -3,7 +3,7 @@ from funciones import*
 #5.1
 def imprimir_menu(opciones):
     
-    for opcion in opciones:
+    for opcion in opciones: #recorro la lista opciones y la imprimo
         print(opcion)
 
 
@@ -15,8 +15,7 @@ def validar_entero(cadena): #le paso un unico argumento que es lo que quiero ver
 #5.3
 def stark_menu_principal():
 
-    opciones = [
-        print("Elija qué operación quiere realizar: \n",
+    print("Elija qué operación quiere realizar: \n",
             "1. Normalizar datos\n",
             "2. Recorrer la lista imprimiendo por consola el nombre de cada superhéroe de género NB\n",
             "3. Recorrer la lista y determinar cuál es el superhéroe más alto de género F\n",
@@ -28,7 +27,7 @@ def stark_menu_principal():
             "9. Determinar cuántos superhéroes tienen cada tipo de color de pelo.\n",
             "10. Listar todos los superhéroes agrupados por color de ojos.\n",
             "11. Listar todos los superhéroes agrupados por tipo de inteligencia\n",
-            "0. Salir\n")]   
+            "0. Salir\n")   
     
     respuesta = input("Ingrese una opción: ")
 
@@ -44,22 +43,22 @@ def stark_menu_principal():
 #6
 # 6. Función principal de la aplicación Stark Marvel
 def stark_marvel_app(lista_personajes):
-    datos_normalizados = False
+    datos_normalizados = False #inicializo en false para poder manejarlos
     opcion_uno = False
     opcion_ingresada = True
 
     while opcion_ingresada:
         respuestas = stark_menu_principal()
 
-        if not opcion_uno and respuestas != 1:
+        if not opcion_uno and respuestas != 1: #verifico si la opcion 1 todavia no se selecciono
             print("Primero debes seleccionar la opción 1 para normalizar los datos.")
             continue
        
         match respuestas:
             case 1:
-                if not datos_normalizados:
+                if not datos_normalizados: #verifico si los datos no fueron normalizados
                     datos_normalizados = stark_normalizar_datos(lista_personajes)
-                    opcion_uno = True
+                    opcion_uno = True #paso a true para saber que ya se selecciono la opcion uno
                 else:
                     print("Los datos ya fueron normalizados.")
             case 2:
@@ -86,7 +85,7 @@ def stark_marvel_app(lista_personajes):
                 print("¡Adiós!")
                 opcion_ingresada = False
             case _:
-                if not opcion_uno:
+                if not opcion_uno: #vierifico si no se selecciono la primera opcion
                     print("Primero debes seleccionar la opción 1 para normalizar los datos.")
                 else:
                     print("Opción no válida. Por favor, ingrese una opción válida.")

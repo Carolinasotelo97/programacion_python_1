@@ -1,11 +1,11 @@
 from data_stark import lista_personajes
 
-bandera = True
-fuerza_max = lista_personajes[0]
-cantidad_personajes_masculinos = 0
-total_peso_masculino = 0
-cantidad_personajes_femeninas = 0
-total_fuerza_femeninas = 0
+bandera = True #inicializo bandera en True para controlar el bucle While 
+fuerza_max = lista_personajes[0] #inicializo la variable fuerza_max con el primer elemento de la lista_personajes para indicar que es el superheroe con mas fuerza hasta que encuentre otro
+cantidad_personajes_masculinos = 0  #inicializo esta variable en 0 para llevar la cuenta de la cantidad de masculinos
+total_peso_masculino = 0 #inciailizo esta variable en 0 para llevar la cuenta del total de pesos masculinos
+cantidad_personajes_femeninas = 0 #inicializo esta variable en 0 para llevar la cuenta de la cantidad de femeninas
+total_fuerza_femeninas = 0 #inciailizo esta variable en 0 para llevar la cuenta del total de fuerza femenina
 
 while bandera:
     print("Elija qué operación quiere realizar: \n",
@@ -20,69 +20,62 @@ while bandera:
     match respuesta:
         case "A":
             print("*********************************       LISTA DE PERSONAJES       *********************************")
-            #recorro la lista de personajes y la imprimo
-            for superheroe in lista_personajes:
+            
+            for superheroe in lista_personajes: #recorro la lista_personajes segun cada elemento
                     print("Personaje: ", superheroe["nombre"], superheroe["identidad"], superheroe["empresa"], superheroe["altura"], superheroe["peso"], superheroe["genero"], superheroe["color_ojos"], superheroe["color_pelo"], superheroe["fuerza"], superheroe["inteligencia"], "\n------------------------------------------------------------------------------------------------------------------------------------------","\n")
+                    #imprimo valor de las claves que le paso 
         case "B":
             #recorro la lista de personajes por fuerza
-            for fuerza in lista_personajes:
-                if(int(fuerza["fuerza"]) > int(fuerza_max["fuerza"])): #parseo para que me convierta a int
-                    fuerza_max = fuerza
-            #imprimo la lista segun la identidad y peso con mayor fuerza
+            for fuerza in lista_personajes: #recorro la lista_personajes segun cada elemento 
+                if(int(fuerza["fuerza"]) > int(fuerza_max["fuerza"])): #verifico que la fuerza del supereheroe actual es mayor que la fuerza max encontrada 
+                    fuerza_max = fuerza #si la fuerza actual es mayor a la max, actualizo la varibale fuerza_max co la nueva fuerza encontrada
+            
             print("******* PERSONAJE CON MAS FUERZA *******")
             print("Identidad:{0}\nFuerza:{1}\nPeso:{2}\n" .format(fuerza_max["identidad"], fuerza_max["fuerza"], fuerza_max["peso"]))
         case "C":
-            #inicializo
-            altura_min = lista_personajes[0]
-            #recorro la lista de personajes buscando la altura minima
-            for alturas in lista_personajes:
-                if(float(alturas["altura"]) < float(altura_min["altura"])): #parseo para que me convierta a float
-                    altura_min = alturas
+            altura_min = lista_personajes[0] #inicializo la variable altura_min con el primer elemento de la lista_personajes para indicar que es el superheroe con altura_min hasta el momento
+            
+            for alturas in lista_personajes:#recorro la lista de personajes buscando la altura minima
+                if(float(alturas["altura"]) < float(altura_min["altura"])): #verifico que la altura actual sea menor que la altura_min encontrada
+                    altura_min = alturas #si lo es, actualizo la variable altura_min con la nueva altura encontrada
             #imprimo el personaje mas bajo
             print("******* PERSONAJE MAS BAJO *******")
             print("Identidad:{0}\nNombre:{1}\nAltura:{2}\n" .format(altura_min["identidad"], altura_min["nombre"], altura_min["altura"]))
         case "D":
-            #recorro la lista de personajes por pesos
-            for pesos in lista_personajes:
-                #inicializo
-                genero = pesos["genero"]
-                cantidad_personajes_masculinos+= 1 #cuento los personajes que son masculinos
+            for pesos in lista_personajes: #recorro la lista de personajes por pesos
+                genero = pesos["genero"] #obtengo el genero del superheroe actual y lo guardo en una variable genero
+                cantidad_personajes_masculinos+= 1 #aumento en 1 la cantidad de personajes masculinos cada vez que itero en la lista
                 float(pesos["peso"]) #parseo el peso a numero float
-                total_peso_masculino += float(pesos["peso"])
+                total_peso_masculino += float(pesos["peso"]) #sumo el peso actual al contador total_peso_masculino
             
-            #verifico que el personajes sea masculino
-            if genero == "M":
-                total_peso_masculino += float(pesos["peso"])
-                cantidad_personajes_masculinos +=1
+            if genero == "M": #verifico que el personajes sea masculino
+                total_peso_masculino += float(pesos["peso"]) #sumo el peso actual al contador total_peso_masculino
+                cantidad_personajes_masculinos +=1 #aumento en 1 la cantidad de personajes masculinos
             
-            #verifico que haya personajes masculinos e imprimo su peso promedio
-            if cantidad_personajes_masculinos > 0:
-                peso_promedio_masculino = total_peso_masculino / cantidad_personajes_masculinos
+            
+            if cantidad_personajes_masculinos > 0:#verifico que haya personajes masculinos
+                peso_promedio_masculino = total_peso_masculino / cantidad_personajes_masculinos #guardo en la variable peso_promedio_masculino la division del total_perso y cantidad_personajes_masculinos para obtener el promedio
                 print("******* PESO PROMEDIO SUPERHEROES MASCULINOS *******")
                 print("Peso promedio:", peso_promedio_masculino, "\n")
             else:
                 print("No hay superhéroes masculinos en la lista.")
         case "E":
             print("******* SUPERHEROES CON MAS FUERZA DEL PROMEDIO DE FUERZA DE MUJERES *******")
-            #recorro la lista de personajes
-            for superheroes in lista_personajes:
-                #verifico si el personaje es femenino y lo incremento por fuerza
-                if superheroes["genero"] == "F":
-                    total_fuerza_femeninas += int(superheroes["fuerza"])#parseo la fuerza a int
-                    cantidad_personajes_femeninas += 1
+            for superheroes in lista_personajes: #recorro la lista de personajes segun cada elemento
+                if superheroes["genero"] == "F": #verifico si el personaje es genero femenino 
+                    total_fuerza_femeninas += int(superheroes["fuerza"])#incremento la fuerza en mi variable total_fuerza_femenina para acumular la fuerza
+                    cantidad_personajes_femeninas += 1 #incremento en uno la cantidad_personajes_femininos para saber cuantos encontre 
 
-            # Verifico si hay superhéroes mujeres en la lista y muestro el promedio de fuerza
-            if cantidad_personajes_femeninas > 0:
-                fuerza_promedio_femenina = total_fuerza_femeninas / cantidad_personajes_femeninas
+            if cantidad_personajes_femeninas > 0: # Verifico si hay superhéroes mujeres en la lista
+                fuerza_promedio_femenina = total_fuerza_femeninas / cantidad_personajes_femeninas #si los hay, guardo en la variable fuerza_promedio_femenina la division del total y cantidad de mujeres para obtener el promedio
             else:
                 fuerza_promedio_femenina = 0    
 
-            # Recorro la lista de superhéroes y muestro nombre y peso de los que tienen fuerza superior al promedio de mujeres
-            for superheroes in lista_personajes:
-                if int(superheroes["fuerza"]) > fuerza_promedio_femenina:
+            for superheroes in lista_personajes:# Recorro la lista de superhéroes
+                if int(superheroes["fuerza"]) > fuerza_promedio_femenina: #verifico si la fuerza femenina actual es mayor a la fuerza promedio obtenida<
                     print("Nombre:{0}\nPeso:{1}\n-----------------------" .format(superheroes["nombre"], superheroes["peso"]))
         case "X":
-            bandera = False
+            bandera = False #inicializo en False para indicar que se termina el bucle 
             print("Adios.")
-        case _:
+        case _: #en caso de opcion no valida
             print("Ingrese una opción válida.\n")

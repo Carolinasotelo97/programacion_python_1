@@ -20,17 +20,17 @@ def extraer_iniciales(nombre_heroe):
 
 #1.2
 def definir_iniciales_nombre(heroe):
-    resultado = {}  # Inicializar un diccionario vacío como resultado
+    resultado = {}  # Inicializo un diccionario vacío en la variable resultado
 
-    if heroe and isinstance(heroe, dict):
-        nombre_heroe = heroe.get('nombre', '')
+    if type(heroe) == dict:  #verifico que heroe sea de tipo diccionario
+        nombre_heroe = heroe.get('nombre', '') #si lo es, obtengo el valor de la clave nombre y lo guardo en una variable nombre_heroe
 
-        if nombre_heroe:
-            iniciales = extraer_iniciales(nombre_heroe)
-
-            if iniciales != 'N/A':
-                heroe['iniciales'] = iniciales
-                resultado = heroe
+        if nombre_heroe: #verifico que nombre_heroe no sea None
+            iniciales = extraer_iniciales(nombre_heroe) #si no lo es, llamo a mi funcion extraer iniciales y le paso como parametro nombre_heroe y lo guardo en una variable iniciales
+ 
+            if iniciales != 'N/A': #verifico que las iniciales obtenidas no sean N/a
+                heroe['iniciales'] = iniciales #si no lo es, agrego la clave 'iniciales' con su valor al diccionario de heroes
+                resultado = heroe #retorno el diccionario
 
     return resultado
 
@@ -42,8 +42,8 @@ def agregar_iniciales_nombre(lista_heroes):
 
     nombres_con_iniciales = []  # Lista para almacenar los nombres con iniciales
 
-    for heroe in lista_heroes:
-        resultado = definir_iniciales_nombre(heroe)
+    for heroe in lista_heroes: #recorro la lista_heroes segun cada heroe
+        resultado = definir_iniciales_nombre(heroe)  #llamo a mi funcion definir_iniciales_nombre y le paso hereo como parametro y lo guardo en una varibale de resultado
 
         if resultado is not None:  # Verificar si el resultado no es None
             nombres_con_iniciales.append(resultado)  # Agregar el nombre con iniciales a la lista
@@ -68,6 +68,20 @@ def stark_imprimir_nombres_con_iniciales(lista_heroes):
 
 #2.1
 def generar_codigo_heroe(id_heroe, genero_heroe):
+    # Validar que el id_heroe sea numérico y el género sea válido
+    if not (type(id_heroe) == int) or genero_heroe not in ['M', 'F', 'NB']:
+        return "N/A"
+
+    # Formatear el código con el género y el id_heroe, llenando con ceros
+    codigo = f"{genero_heroe}-{str(id_heroe).zfill(8)}"
+
+    if len(codigo) != 10:  # Verificar si el código tiene exactamente 10 caracteres
+        return "N/A"
+
+    return codigo
+
+#2.2
+def generar_codigo_heroe(id_heroe, genero_heroe):
     if not id_heroe: #verifico que no exista un id_heroe
         return "N/A" #si no existe, arroja N/A
     
@@ -81,96 +95,53 @@ def generar_codigo_heroe(id_heroe, genero_heroe):
      return "N/A"
 
     return codigo
-
-#2.2
-def agregar_codigo_heroe(heroe, id_heroe):
-    if heroe is None or len(heroe) == 0 or type(heroe) is not list: #verifico que heroe sea None, este vacio o no sea lista
-        print("la lista esta vacia") #si no es ninguno, imprime que la lista esta vacia
-        return False  # Devuelve False para saber cuando la lista esta vacia
-
-    for heroes in heroe: #recorro la lista de heroe por cada heroes
-        genero_heroe = heroes.get('genero') #obtengo la clave genero de la lista  de heroes y la guardo en una variable genero_heroe
-        codigo = generar_codigo_heroe(id_heroe, genero_heroe) #llamo a mi funcion generar_codigo_heroe y le paso el id_heroe y el genero como argumentos y lo obtenido lo guardo en una variable codigo
-
-        if len(codigo) != 10: #verifico que el codigo obtenido con el genero_heroe-id_heroe tenga 10 caracteres
-            print("El codigo tiene mas de 10 caracteres") #si no cumple, imprime el mensaje de error
-            return False
-        
-        heroes['codigo_heroe'] = codigo #guardo en la clave codigo_heroe el valor del codigo
-
-    return True  # Devolver la lista de nombres con iniciales (lista no vacia)
-
 # 2.3
 def stark_generar_codigos_heroes(lista_heroes):
-    if not lista_heroes:
+    if not lista_heroes: #verifico que la lista  este vacia
         print("El origen de datos no contiene el formato correcto")
         return
 
-    cantidad_codigos = 0
-    primer_id = 1
+    cantidad_codigos = 0 #inicializo el contador de codigos para luego sumarlos
+    primer_id = 1 #inicializo el primer_id en 1 para luego incrementar
 
-    for heroe in lista_heroes:
-        if 'genero' not in heroe or not isinstance(heroe, dict):
-            print("El origen de datos no contiene el formato correcto")
+    for heroe in lista_heroes: #recorro la lista_heroes segun cada heroe
+        if 'genero' not in heroe or type(heroe) is not dict: #verifico que la calve genero este en el diccionario y que heroe sea de tippo diccionario
+            print("El origen de datos no contiene el formato correcto") #si no cumple, devuelve el mensaje de error
             return
 
-        genero_heroe = heroe['genero']
-        codigo = generar_codigo_heroe(primer_id, genero_heroe)
+        genero_heroe = heroe['genero'] #obtengo el genero del diccionario heroe y lo guardo en una nueva variable
+        codigo = generar_codigo_heroe(primer_id, genero_heroe) #llamo a mi funcion generar_codigo_heroe para generar el codigo del heroe y lo guardo en una variable codigo
 
-        heroe['codigo_heroe'] = codigo
-        cantidad_codigos += 1
+        heroe['codigo_heroe'] = codigo #agrego la nueva clave "codigo_heroe" a el diccionario hereo y le guardo su valor codigo
+        cantidad_codigos += 1 #incremento el contador
         primer_id += 1
 
-    if cantidad_codigos > 0:
+    if cantidad_codigos > 0: #verifico que se haya generado el codigo 
         print(f"Se asignaron {cantidad_codigos} códigos")
-        print(f"* El código del primer héroe es: M-{str(1).zfill(8)}")
+        print(f"* El código del primer héroe es: -M-{str(1).zfill(8)}")#imrpimo el codigo, lo convierto en str para poder usar el metodo zfill y que rellene con 0 a la izquierda
         print(f"* El código del último héroe es: M-{str(primer_id - 1).zfill(8)}")
 
 
-'''
-def stark_generar_codigos_heroes(lista_heroes):
-    if not lista_heroes: #verifico que lista heroes no este vacia
-        print("El origen de datos no contiene el formato correcto") #si lo esta devuevle el siguietne mensaje de error
-        return False #retorna False que indica que la lista esta vacia
-    
-    #incializo mis contadores para los IDs
-    cantidad_codigos = 0 #cuenta cuantos codigos se generaron
-    id_heroe = 1 #asigna el valor del ID de inicio
-    primer_id = id_heroe #creo una variable para guardarme el primer ID antes de que se incremente
-    
-    for heroe in lista_heroes: #recorro la lista_heroes segun cada heroe
-        genero_heroe= heroe['genero'] #obtengo el genero de cada heroe y lo guardo en una variable genero_heroe
-        codigo = generar_codigo_heroe(id_heroe, genero_heroe) # llamo a mi funcion generar_codigo_heroe y le paso los parametros id_heroe y genero_heroe y lo guardo en mi variable codigo
-
-        heroe['codigo_heroe'] = codigo #almaceno el codigo nuevo en la clave codigo_heroe
-        cantidad_codigos += 1 #incremento para saber cuantos codigos lelvo generados
-        id_heroe +=1 #incremento para asignar el siguiente ID
-    
-    print("Se asignarion {} codigos" .format(cantidad_codigos)) #muestro la cantidad de codigos generados
-    if cantidad_codigos > 0: #verifico que haya nuevos codigos
-        print("* El código del primer héroe es: M-{}" .format(str(primer_id).zfill(8))) #covierto primer_id en str para poder usar zfill y que rellen con 0 hacia la izquierda
-        print("* El código del último héroe es: M-{}".format(str(id_heroe - 1).zfill(8))) #convieto id_heroe en str y le resto 1 para obtener el ultimo id de la lista.
-'''     
 
 #3.1
 def sanitizar_entero(numero_str):
-    numero_str = numero_str.strip()  # Elimina espacios en blanco al principio y al final
-    if numero_str[0] == '-':
+    numero_str = numero_str.strip()  # elimina espacios en blanco al principio y al final de numero_str
+    if numero_str[0] == '-': #verifico que el primer caracter sea un "-" para verificar los numeros negativos
         return -2  # Número negativo
-    if numero_str.isdigit():
-        return int(numero_str)
+    if numero_str.isdigit(): #verifico que los caracteres de numero_str sean numericos
+        return int(numero_str) #y devuleve el numero entero
     else:
         return -1  # Contiene caracteres no numéricos
 
 #3.2
 def sanitizar_flotante(numero_str):
-    numero_str = numero_str.strip()  # Elimina espacios en blanco al principio y al final
-    if numero_str[0] == '-':
+    numero_str = numero_str.strip()  # elimino espacios en blanco al principio y al final
+    if numero_str[0] == '-':#verifico que el primer caracter sea un "-" para verificar los numeros negativos
         return -2  # Número negativo
-    parts = numero_str.split('.')
-    if len(parts) == 2 and parts[0].isdigit() and parts[1].isdigit():
-        valor = float(numero_str)
-        if valor >= 0:
+    separador = numero_str.split('.')#divido el numero usando el metodo split con y lo guardo en una varibale separador
+    if len(separador) == 2 and separador[0].isdigit() and separador[1].isdigit(): #verifico que la longitud del separador sea de 2 y que la primera posicion sea un digito entero y que la segunda parte sea un numero entero
+        valor = float(numero_str) #si cumple, guardo el numero float en una variable valor
+        if valor >= 0: #verifico que el valor sea positivo
             return valor
     return -1  # Contiene caracteres no numéricos o no es un número flotante válido
 
@@ -210,17 +181,17 @@ def sanitizar_dato(heroe, clave, tipo_dato):
 
     valor = heroe[clave] #obtengo el valor de la clave en el diccionario y lo guardo en una variable valor
 
-    if tipo_dato.lower() == 'string': #si tipo_dato es string
-        heroe[clave] = sanitizar_string(valor) #llamo a mi funcion sanitizar_string
-    elif tipo_dato.lower() == 'entero':
-        resultado_entero = sanitizar_entero(valor)
+    if tipo_dato.lower() == 'string': # verifico si el tipo_dato es string
+        heroe[clave] = sanitizar_string(valor) #llamo a mi funcion sanitizar_string y le paso el valor obtenido
+    elif tipo_dato.lower() == 'entero':# verifico si el tipo_dato es entero
+        resultado_entero = sanitizar_entero(valor)#llamo a mi funcion sanitizar_entero y le paso el valor obtenido
         if resultado_entero is not None:
             heroe[clave] = resultado_entero
         else:
             print(f'Error: No se pudo convertir a entero la clave "{clave}" con valor "{valor}"')
             return False
-    elif tipo_dato.lower() == 'flotante':
-        resultado_flotante = sanitizar_flotante(valor)
+    elif tipo_dato.lower() == 'flotante':# verifico si el tipo_dato es flotante
+        resultado_flotante = sanitizar_flotante(valor)#llamo a mi funcion sanitizar_float y le paso el valor obtenido
         if resultado_flotante is not None:
             heroe[clave] = resultado_flotante
         else:
@@ -240,10 +211,13 @@ def stark_normalizar_datos(lista_heroes):
     for heroe in lista_heroes: #recorro la lista_heroes segun cada heroe
         for clave in heroe: #recorro las claves de cada heroe
             if clave in ["altura", "peso", "color_ojos", "color_pelo", "fuerza", "inteligencia"]: #verifico si estan las claves solicitadas
-                if clave in ["altura", "peso", "fuerza"]: #verifico el tipo de dato de estas claves
+                if clave in ["altura", "peso"]: #verifico el tipo de dato de estas claves
                     tipo_dato = "flotante" #si existen estas claves, les digo que son flotantes
                 else:
-                    tipo_dato = "string" #de lo contrario sera un string
+                    if clave in ["fuerza"]: #verifico que el tipo de dato de la clave Fuerza sea entero
+                        tipo_dato = "entero" #si lo es, le digo que es entero
+                    else:
+                        tipo_dato = "string" #de lo contrario sera un string
                 sanitizar_dato(heroe, clave, tipo_dato) #llamo a mi funcion sanitizar_dato y le paso los argumentos heroe, clave y tipo_dato y normalizo el dato 
 
     print("\nDatos normalizados!")
@@ -307,15 +281,32 @@ def generar_encabezado(titulo):
         encabezado = f"{separador*20}\n {titulo} \n{separador*20}"#Genero el encabezado combinando el separador, el título y otro separador 
 
         return encabezado  #retorno el encabezado final
-
 #5.4
 def imprimir_ficha_heroe(lista_heroes):
-    # Crear el separador
-    separador = '*' * 95
+   
+    asignar_codigos = False  # Verificar si alguno de los héroes no tiene un código asignado
 
-    for heroe in lista_heroes:
+    for heroe in lista_heroes: #recorro la lista_heroes segun los heroes
+        if 'codigo_heroe' not in heroe: #verifico que el codigo_heroe no este en el diccionario
+            asignar_codigos = True #si encuentro un heroe sin codigo pongo en True
+
+    # Si es necesario, asignar códigos a los héroes que no los tienen
+    if asignar_codigos:
+        primer_id = 1
+
+        for heroe in lista_heroes: #recorro la lista_heroes segun cada heroe
+            if 'codigo_heroe' not in heroe: #verfico que la clave codigo no este en el diccionario de heroes
+                genero_heroe = heroe.get('genero')#si no esta, obtengo el valor del genero y lo guardo en una variable
+                codigo = generar_codigo_heroe(primer_id, genero_heroe) #llamo a mi funcion generar_codigo_heroe y lo guardo en una variable codigo
+                if len(codigo) == 10:#verifico que la longitud del codigo sea igual a 10
+                    heroe['codigo_heroe'] = codigo #si lo es, agrego el codigo a mi lista y le asigno el valor
+                    primer_id += 1
+
+    separador = '*' * 95    # Crear el separador
+
+    for heroe in lista_heroes: #recorro la lista_heroes segun cada heroe
         # Extraer los datos del héroe
-        nombre_heroe = heroe.get('nombre', 'N/A')
+        nombre_heroe = heroe.get('nombre', 'N/A')   
         iniciales = extraer_iniciales(nombre_heroe)
         identidad_secreta = heroe.get('identidad', 'N/A')
         consultora = heroe.get('empresa', 'N/A')
@@ -348,28 +339,28 @@ def imprimir_ficha_heroe(lista_heroes):
         print('COLOR DE OJOS: {}'.format(color_ojos))
         print('COLOR DE PELO: {}'.format(color_pelo))
 
-
 #5.5
 def stark_navegar_fichas(lista_heroes):
-    if not lista_heroes:
+    if not lista_heroes: #verifico que la lista de heroes no este vacia
         print("No hay personajes para mostrar.")
         return
 
-    ficha_actual = 0
+    ficha_actual = 0 #inicializo en 0 la variable ficha_actual para hacer seguimiento
 
     while True:
-        heroe = lista_heroes[ficha_actual]
-        print("\nFicha del Héroe:")
-        imprimir_ficha_heroe([heroe])
+        heroe = lista_heroes[ficha_actual] #obtengo el heroe_actual y lo guardo en una varia<ble. Muestra el heroe que se va a ver en al ficha
+        print("\nFicha del Héroe:") #muestro la ficha actual
+     
+        imprimir_ficha_heroe([heroe]) #llamo a mi funcion imprimir_ficha_heroe 
 
-        print("[ 1 ] Ir a la izquierda [ 2 ] Ir a la derecha [ S ] Salir")
+        print("[ 1 ] Ir a la izquierda [ 2 ] Ir a la derecha [ S ] Salir") 
         opcion = input("Seleccione una opción: ").strip().lower()
 
         match opcion:
             case '1':
-                ficha_actual = (ficha_actual - 1) % len(lista_heroes)
+                ficha_actual = (ficha_actual - 1) % len(lista_heroes) # ajusto el valor de ficha_actual restando 1 y utilizando el operador % para asegurarse de que el índice esté dentro de los límites de la lista.
             case '2':
-                ficha_actual = (ficha_actual + 1) % len(lista_heroes)
+                ficha_actual = (ficha_actual + 1) % len(lista_heroes)# ajusta el valor de ficha_actual sumandio  1 y utilizando el operador % para asegurarse de que el índice esté dentro de los límites de la lista.
             case 's':
                 break
             case _:

@@ -14,7 +14,7 @@ def stark_normalizar_datos(lista_personajes):
         if "fuerza" in heroe: #verifico si hay alguna clave llamada fuerza
             nuevo_valor = str(heroe["fuerza"]) #si la tiene, la guardo en una nueva varible como cadena de texto para poder usar una expresion regular
             if re.search(r'^[0-9]+(\.[0-9]+)?$', nuevo_valor): #utilizo el metodo re.search para ver si el valor es un numero valido. Utilizo la expresion regular para verificar si la cadena es un int o es float valido.
-                heroe["fuerza"] = int(heroe["fuerza"]) #si es valido, entra al if convertimos ese valor en un int
+                heroe["fuerza"] = int(heroe["fuerza"]) #si es valido, entra al if convertimos ese valor en un int y actualizo la clave
                 datos_modificados = True #cambio a True para saber que se modifico un dato
         
         for clave in ["altura", "peso"]: # Utilizo CLAVE para acceder directamente a las claves del diccionario y recorro en este caso, las claves altura y peso para verificar si existen.
@@ -61,10 +61,10 @@ def mostrar_heroe_nb(lista_personajes): #le paso la lista de personajes
 
 #2
 def obtener_nombre_y_dato(heroe: dict, clave:str): #le paso el argumento heroe que es un diccionario
-    nombre = obtener_nombre[heroe]
+    nombre = obtener_nombre[heroe] #llamo a mi funcion obtener_nombre y guardo el nombre en la variable
     if nombre: #verifico si se pudo obtener el dato para el nombre
-        if clave in heroe:
-            dato = heroe[clave]
+        if clave in heroe: #verifico que exista la clave
+            dato = heroe[clave] #si existe, guardo la clave
             return f"\nNombre:{nombre}\n {clave}: {dato}" #si se obtuvo el dato, muestro el nombre
         else:
             return False
@@ -107,10 +107,11 @@ def obtener_dato_cantidad(lista_personajes, dato, clave):
         return[] #y devuelve una lista vacia
     
     resultado = [] #creo una lista vacia en donde voy a guardar la lista de heroes que si cumplan con las condiciones
+    
+    valor_maximo = obtener_maximo(lista_personajes, clave)
+    valor_minimo = obtener_minimo(lista_personajes, clave)
 
-    #calculo el valor max y min de la clave
-    maximo_valor = obtener_maximo(lista_personajes, clave)
-    minimo_valor = obtener_minimo(lista_personajes, clave)
+    
 
     for heroe in lista_personajes: #recorro la lista
         valor = heroe.get(clave) #obtengo el valor de clave del heroe actual 
